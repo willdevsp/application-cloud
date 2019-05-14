@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: biro-credito
+  cloud:
+    config:
+      uri: http://localhost:9090
+
+
+
+
