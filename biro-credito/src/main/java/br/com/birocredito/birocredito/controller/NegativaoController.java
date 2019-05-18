@@ -1,19 +1,55 @@
 package br.com.birocredito.birocredito.controller;
 
-import br.com.birocredito.birocredito.model.Cliente;
-import br.com.birocredito.birocredito.repository.ClienteRepository;
+import br.com.birocredito.birocredito.model.PessoaFisica;
+import br.com.birocredito.birocredito.model.PessoaJuridica;
+import br.com.birocredito.birocredito.model.SituacaoCadastral;
+import br.com.birocredito.birocredito.repository.PessoaFisicaRepository;
+import br.com.birocredito.birocredito.service.NegativacaoService;
+import br.com.birocredito.birocredito.service.ValidatorPessoaFisica;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("negativacao")
 public class NegativaoController {
     @Autowired
-    ClienteRepository repository;
+    private PessoaFisicaRepository repository;
+    @Autowired
+    private NegativacaoService service;
+
+    @Autowired
+    private ValidatorPessoaFisica validatorPessoaFisica;
+
+    @Autowired
+    private MessageSource messageSource;
+
     @PostMapping
-    public Cliente addCliente(Cliente cliente){
-        return repository.save(cliente);
+    public PessoaFisica addCliente(@RequestBody PessoaFisica pf){
+        return repository.save(pf);
+    }
+
+
+    @GetMapping("/negativar/pessoajuridica")
+    public SituacaoCadastral consultar(PessoaJuridica cnpj, Errors errors){
+
+
+
+        return null;
+    }
+
+    @PostMapping("/negativar/pessoafisica")
+    public ResponseEntity<?> consultarPF(@RequestBody PessoaFisica pessoaFisica, Errors errors){
+        validatorPessoaFisica.validate(pessoaFisica, errors);
+        if(errors.hasErrors()){
+            return ResponseEntity
+                    .badRequest()
+                    .body(messageSource.getMessage(errors.getFieldError().getCode(),null,null));
+        }
+
+        return null;
     }
 }
