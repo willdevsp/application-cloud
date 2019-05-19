@@ -5,7 +5,7 @@ import br.com.birocredito.birocredito.model.PessoaFisica;
 
 public interface ConsultaNegativacaoInterface {
     PessoaFisica consultaNegativacaoPF(String cpf, OrgaoProtecaoCredito orgaoProtecaoCredito);
-    PessoaFisica consultaSPC(String cpf);
-    PessoaFisica consultaSerasa(String cpf);
-    PessoaFisica consultaBoaVista(String cpf);
+    PessoaFisica consultaSpcPF(String cpf);
+    PessoaFisica consultaSerasaPF(String cpf);
+    PessoaFisica consultaBoaVistaPF(String cpf);
 }

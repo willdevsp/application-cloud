@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.websocket.server.PathParam;
+import java.util.List;
 
 @RestController
 @RequestMapping("consulta")
@@ -20,7 +21,7 @@ public class ConsultaNegativacaoController {
     public ResponseEntity<?> consultarNegativacao(@PathParam("cpf") String cpf){
 
         try{
-            PessoaFisica pf = service.consultaSPC(cpf);
+            List<PessoaFisica> pf = service.consultaCpf(cpf);
            return ResponseEntity.ok().body(pf);
 
         }catch (Exception e){

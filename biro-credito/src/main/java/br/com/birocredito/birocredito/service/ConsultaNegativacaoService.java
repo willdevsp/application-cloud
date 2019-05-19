@@ -12,12 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ConsultaNegativacaoService implements ConsultaNegativacaoInterface {
     @Value("${spc.pessoa.fisica.url}")
     private String spcPf;
+    @Value("${serasa.pessoa.fisica.url}")
+    private String serasaPf;
+    @Value("${boavista.pessoa.fisica.url}")
+    private String boavistaPf;
 
     @Override
     public PessoaFisica consultaNegativacaoPF(String cpf, OrgaoProtecaoCredito orgaoProtecaoCredito) {
@@ -25,9 +30,9 @@ public class ConsultaNegativacaoService implements ConsultaNegativacaoInterface 
         if(orgaoProtecaoCredito.equals(OrgaoProtecaoCredito.SPC))
             url = spcPf;
         if(orgaoProtecaoCredito.equals(orgaoProtecaoCredito.SERASA))
-            url = spcPf;
+            url = serasaPf;
         if(orgaoProtecaoCredito.equals(orgaoProtecaoCredito.BOA_VISTA))
-            url = spcPf;
+            url = boavistaPf;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<List<PessoaFisica>> response = restTemplate.exchange(url+"?search="+cpf, HttpMethod.GET,
                 null, new ParameterizedTypeReference<List<PessoaFisica>>(){});
@@ -42,17 +47,30 @@ public class ConsultaNegativacaoService implements ConsultaNegativacaoInterface 
     }
 
     @Override
-    public PessoaFisica consultaSPC(String cpf) {
+    public PessoaFisica consultaSpcPF(String cpf) {
         return consultaNegativacaoPF(cpf, OrgaoProtecaoCredito.SPC);
     }
 
     @Override
-    public PessoaFisica consultaSerasa(String cpf) {
+    public PessoaFisica consultaSerasaPF(String cpf) {
         return consultaNegativacaoPF(cpf, OrgaoProtecaoCredito.SERASA);
     }
 
     @Override
-    public PessoaFisica consultaBoaVista(String cpf) {
+    public PessoaFisica consultaBoaVistaPF(String cpf) {
         return consultaNegativacaoPF(cpf, OrgaoProtecaoCredito.BOA_VISTA);
+    }
+    public List<PessoaFisica> consultaCpf(String cpf){
+        List<PessoaFisica> listPessoaFisica = new ArrayList<>();
+        PessoaFisica spc = consultaSpcPF(cpf);
+        PessoaFisica serasa = consultaSerasaPF(cpf);
+        PessoaFisica boaVista = consultaBoaVistaPF(cpf);
+        if(spc!= null)
+            listPessoaFisica.add(spc);
+        if(serasa != null)
+            listPessoaFisica.add(serasa);
+        if(boaVista!=null)
+            listPessoaFisica.add(boaVista);
+        return listPessoaFisica;
     }
 }
