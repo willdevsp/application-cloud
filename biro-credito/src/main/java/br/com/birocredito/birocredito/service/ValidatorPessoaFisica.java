@@ -1,10 +1,9 @@
 package br.com.birocredito.birocredito.service;
 
+import br.com.birocredito.birocredito.dto.PessoaFisicaNegativarDTO;
 import br.com.birocredito.birocredito.model.PessoaFisica;
-import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 
@@ -17,9 +16,9 @@ public class ValidatorPessoaFisica implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        PessoaFisica pessoaFisica = (PessoaFisica) target;
+        PessoaFisicaNegativarDTO pessoaFisica = (PessoaFisicaNegativarDTO   ) target;
         if(validarCpfVazio(pessoaFisica.getCpf())){
-         errors.rejectValue("cpf", "invalid.cpf");
+         errors.rejectValue("cpf", "cpf.empty");
         }
 
 

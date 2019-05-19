@@ -1,9 +1,9 @@
 package br.com.birocredito.birocredito.util;
 
-import br.com.birocredito.birocredito.model.PessoaJuridica;
-import br.com.birocredito.birocredito.model.SituacaoCadastral;
+import br.com.birocredito.birocredito.dto.PessoaFisicaNegativarDTO;
+import br.com.birocredito.birocredito.model.PessoaFisica;
 
 public interface NegativacaoInterface {
-    void negativarClientePF(PessoaJuridica cnpj);
+    PessoaFisica negativarClientePF(PessoaFisicaNegativarDTO pessoaFisicaNegativarDTO);
 
 }

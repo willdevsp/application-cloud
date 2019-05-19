@@ -1,5 +1,6 @@
 package br.com.birocredito.birocredito.controller;
 
+import br.com.birocredito.birocredito.dto.PessoaFisicaNegativarDTO;
 import br.com.birocredito.birocredito.model.PessoaFisica;
 import br.com.birocredito.birocredito.model.PessoaJuridica;
 import br.com.birocredito.birocredito.model.SituacaoCadastral;
@@ -42,14 +43,27 @@ public class NegativaoController {
     }
 
     @PostMapping("/negativar/pessoafisica")
-    public ResponseEntity<?> consultarPF(@RequestBody PessoaFisica pessoaFisica, Errors errors){
-        validatorPessoaFisica.validate(pessoaFisica, errors);
-        if(errors.hasErrors()){
-            return ResponseEntity
-                    .badRequest()
-                    .body(messageSource.getMessage(errors.getFieldError().getCode(),null,null));
-        }
+    public ResponseEntity<?> consultarPF(@RequestBody PessoaFisicaNegativarDTO pessoaFisicaNegativarDTO, Errors errors){
+        validatorPessoaFisica.validate(pessoaFisicaNegativarDTO, errors);
 
+      try{
+          if(errors.hasErrors()){
+              return ResponseEntity
+                      .badRequest()
+                      .body(getMessage(errors.getFieldError().getCode()));
+          }
+          PessoaFisica pf = service.negativarClientePF(pessoaFisicaNegativarDTO);
+          if(pf!= null)
+            return ResponseEntity.ok().body(pf);
+          return ResponseEntity.badRequest().body(getMessage("negativar.error"));
+
+      }catch (Exception e){
+          System.out.println(e);
+      }
         return null;
+    }
+
+    private String getMessage(String code){
+        return messageSource.getMessage(code, null,null);
     }
 }
